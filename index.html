@@ -238,7 +238,7 @@
         <span class="track-title">fukazume</span>
       </div>
       <div class="lyrics-container">
-        <pre class="lyrics-display">歌詞を読み込み中...</pre>
+        <pre class="lyrics-display"></pre>
       </div>
     </div>
 
@@ -302,132 +302,107 @@
       const player = document.getElementById('main-player');
       const trackItems = document.querySelectorAll('.track-item');
       const lyricsDir = 'lyrics/';
-      let currentPlayingIndex = -1; // 現在再生中の曲のインデックス
+      let currentPlayingIndex = -1;
 
-      // --- 関数: 歌詞をフェッチして表示 ---
+      // --- 歌詞を読み込む関数 ---
       async function loadLyrics(trackItem) {
         const fileName = trackItem.dataset.lyrics;
         const preElement = trackItem.querySelector('.lyrics-display');
+        if (!fileName || preElement.textContent.trim() !== "") return;
 
-        // すでに歌詞が読み込まれている場合はスキップ
-        if (!fileName || (preElement.textContent !== "" && preElement.textContent !== "歌詞を読み込み中...")) return;
-
+        preElement.textContent = "歌詞を読み込み中...";
         try {
           const response = await fetch(lyricsDir + fileName);
-          if (!response.ok) throw new Error('歌詞が見つかりません');
+          if (!response.ok) throw new Error();
           const text = await response.text();
           preElement.textContent = text;
         } catch (error) {
           preElement.textContent = '歌詞の読み込みに失敗しました。';
-          console.error(error);
         }
       }
 
-      // --- 関数: 指定したインデックスの曲を再生 ---
+      // --- 曲を再生する関数 ---
       function playTrack(index) {
-        if (index < 0 || index >= trackItems.length) return;
-
         const trackItem = trackItems[index];
         const audioSrc = trackItem.dataset.audio;
 
-        // 全曲の「再生中」「歌詞表示」クラスを一度リセット
-        trackItems.forEach(item => {
-          item.classList.remove('playing');
-          item.classList.remove('active'); // 歌詞を閉じる (Apple Music風: 再生時にその曲の歌詞を開く)
-          item.querySelector('.play-trigger').textContent = '▶';
-        });
+        // 違う曲を再生する場合のみソースを入れ替え
+        if (currentPlayingIndex !== index) {
+          player.src = audioSrc;
+          currentPlayingIndex = index;
+          
+          // 全体の「再生中」表示をリセット
+          trackItems.forEach(item => {
+            item.classList.remove('playing');
+            item.querySelector('.play-trigger').textContent = '▶';
+          });
+        }
 
-        // プレイヤーに音源を設定して再生
-        player.src = audioSrc;
         player.play();
-
-        // UIの状態を更新
         trackItem.classList.add('playing');
-        trackItem.classList.add('active'); // 再生した曲の歌詞を展開
-        trackItem.querySelector('.play-trigger').textContent = '⏸'; // 一時停止アイコンに
-        currentPlayingIndex = index;
-
-        // 歌詞を読み込む
-        loadLyrics(trackItem);
+        trackItem.querySelector('.play-trigger').textContent = '⏸';
       }
 
-      // --- 関数: 再生/一時停止のトグル ---
+      // --- 再生/一時停止を切り替える関数 ---
       function togglePlay(index) {
         if (index === currentPlayingIndex) {
-          // 同じ曲のボタンが押された場合
           if (player.paused) {
             player.play();
-            trackItems[index].querySelector('.play-trigger').textContent = '⏸';
           } else {
-            player.paused();
-            trackItems[index].querySelector('.play-trigger').textContent = '▶';
+            player.pause(); // 修正点: .paused() ではなく .pause()
           }
         } else {
-          // 違う曲が押された場合
           playTrack(index);
         }
       }
 
-      // --- イベントリスナー設定 ---
+      // --- イベント設定 ---
       trackItems.forEach((item, index) => {
         const playBtn = item.querySelector('.play-trigger');
         const header = item.querySelector('.track-header');
-        const title = item.querySelector('.track-title');
 
-        // A. 再生ボタンクリック
+        // 再生ボタンクリック
         playBtn.addEventListener('click', (e) => {
-          e.stopPropagation(); // ヘッダーのクリックイベント（歌詞展開）を防止
+          e.stopPropagation();
           togglePlay(index);
         });
 
-        // B. 曲名エリア（ヘッダー）クリック -> 歌詞の展開/折りたたみ
+        // 曲名ヘッダークリック（歌詞の開閉のみ）
         header.addEventListener('click', () => {
-          // Apple Music風: すでに開いている歌詞を閉じて、クリックした曲を開く
           const isActive = item.classList.contains('active');
-          
-          // 一旦すべての歌詞を閉じる
+          // 他の歌詞を閉じる
           trackItems.forEach(t => t.classList.remove('active'));
-
+          
           if (!isActive) {
             item.classList.add('active');
-            loadLyrics(item); // 開いた時に歌詞読み込み
+            loadLyrics(item);
           }
-          // すでにアクティブだった場合は、上の処理で閉じられる
         });
       });
 
-      // --- プレイヤー（音響要素）のイベント監視 ---
-
-      // 1. 曲が最後まで再生されたら自動的に次の曲へ
-      player.addEventListener('ended', () => {
-        let nextIndex = currentPlayingIndex + 1;
-        
-        // 最後の曲だったら最初に戻る（ループ）
-        if (nextIndex >= trackItems.length) {
-          nextIndex = 0; 
-        }
-        playTrack(nextIndex);
-      });
-
-      // 2. プレイヤー側で一時停止された時のUI反映
-      player.addEventListener('pause', () => {
-        if (currentPlayingIndex !== -1) {
-          trackItems[currentPlayingIndex].querySelector('.play-trigger').textContent = '▶';
-        }
-      });
-
-      // 3. プレイヤー側で再生再開された時のUI反映
+      // --- プレイヤーの状態をリストのボタンに同期 ---
       player.addEventListener('play', () => {
         if (currentPlayingIndex !== -1) {
           trackItems[currentPlayingIndex].querySelector('.play-trigger').textContent = '⏸';
         }
       });
 
-      // 初期状態：1曲目の歌詞だけ読み込んでおく（再生はしない）
-      if (trackItems.length > 0) {
-        trackItems[0].classList.add('active');
-        loadLyrics(trackItems[0]);
-      }
+      player.addEventListener('pause', () => {
+        if (currentPlayingIndex !== -1) {
+          trackItems[currentPlayingIndex].querySelector('.play-trigger').textContent = '▶';
+        }
+      });
+
+      // 曲が終わったら次へ
+      player.addEventListener('ended', () => {
+        let nextIndex = currentPlayingIndex + 1;
+        if (nextIndex >= trackItems.length) nextIndex = 0;
+        playTrack(nextIndex);
+      });
+      
+      // 初期表示設定:
+      // 以前の「初期表示で1曲目を開く」処理は削除しました。
+      // これで初期状態はすべて閉じた状態になります。
     });
   </script>
 </body>
