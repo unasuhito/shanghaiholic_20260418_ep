@@ -323,6 +323,11 @@
       font-weight: 400;
       font-style: normal;
     }
+
+    .jptxt-scale {
+      display: inline-block; /* これが必要 */
+      transform: scale(1.5, 1.2);
+    }
     
     /* 高解像度ディスプレイ対応 */
     @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
@@ -338,7 +343,7 @@
     <button class="tab-button asset-regular active" data-tab="tab1" data-file="fukazume.txt">fukazume</button>
     <button class="tab-button asset-regular" data-tab="tab2" data-file="jamamon.txt">jamamon</button>
     <button class="tab-button asset-regular" data-tab="tab3" data-file="unasuhito.txt">unasuhito</button>
-    <button class="tab-button asset-regular" data-tab="tab4" data-file="透明になっていく.txt">透明になっていく</button>
+    <button class="tab-button asset-regular" data-tab="tab4" data-file="透明になっていく.txt"><span class="jptxt-scale">透明になっていく</span></button>
     <button class="tab-button asset-regular" data-tab="tab5" data-file="clean-freak.txt">clean-freak</button>
   </div>
 
@@ -361,7 +366,7 @@
   </div>
 
   <div id="tab4" class="tab-content tab-pane asset-regular">
-    <h2>透明になっていく</h2>
+    <h2><span class="jptxt-scale">透明になっていく</span><h2>
     <audio controls src="audios/透明になっていく.mp3"></audio>
     <pre class="lyrics-display"></pre>
   </div>
