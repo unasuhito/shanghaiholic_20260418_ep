@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2025.08.30 EP</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'futura', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.8;
+      background: #111111;
+      color: #e0e0e0;
+      padding: 20px 15px;
+      min-height: 100vh;
+    }
+    
+    h1, h2 {
+      text-align: center;
+      font-weight: 300;
+      color: #ffffff;
+      letter-spacing: 2px;
+    }
+    
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      margin-bottom: 40px;
+    }
+    
+    h2 {
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+    }
+    
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .tab-button {
+      padding: 15px 20px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: clamp(14px, 2.5vw, 16px);
+      font-weight: 400;
+      color: #888;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+      letter-spacing: 1px;
+      min-width: fit-content;
+    }
+    
+    .tab-button:hover {
+      color: #ffffff;
+      background: #222222;
+    }
+    
+    .tab-button.active {
+      color: #ffffff;
+      background: #1a1a1a;
+    }
+    
+    .tab-button.active::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 2px;
+      background: #ffffff;
+      border-radius: 2px;
+    }
+    
+    .tab-content {
+      background: #0f0f0f;
+      border: 1px solid #333333;
+      padding: clamp(20px, 4vw, 35px);
+      border-radius: 12px;
+    }
+    
+    .tab-pane {
+      display: none;
+    }
+    
+    .tab-pane.active {
+      display: block;
+      animation: fadeInUp 0.4s ease-out;
+    }
+    
+    pre {
+      white-space: pre-wrap;
+      font-family: 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+      font-size: clamp(14px, 2.5vw, 16px);
+      margin: 20px 0;
+      line-height: 1.9;
+      color: #d0d0d0;
+      padding: 10px 0;
+    }
+    
+    audio {
+      width: 100%;
+      margin-top: 25px;
+      border-radius: 8px;
+      background: #1a1a1a;
+      outline: none;
+    }
+    
+    audio::-webkit-media-controls-panel {
+      background: rgba(0, 0, 0, 0.8);
+    }
+    
+    @keyframes fadeInUp {
+      from { 
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* スクロールバーのスタイリング */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #222222;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #555555;
+      border-radius: 3px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #777777;
+    }
+    
+    /* タブレット用スタイル */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px 10px;
+      }
+      
+      .tabs {
+        justify-content: flex-start;
+        padding-bottom: 0;
+      }
+      
+      .tab-button {
+        padding: 12px 16px;
+        font-size: 14px;
+      }
+      
+      .tab-content {
+        padding: 20px 15px;
+        border-radius: 8px;
+      }
+      
+      h1 {
+        margin-bottom: 30px;
+      }
+    }
+    
+    /* スマートフォン用スタイル */
+    @media (max-width: 480px) {
+      body {
+        padding: 10px 8px;
+      }
+      
+      .tab-button {
+        padding: 10px 12px;
+        font-size: 13px;
+      }
+      
+      .tab-content {
+        padding: 15px 12px;
+        margin: 0 -2px;
+      }
+      
+      pre {
+        font-size: 13px;
+        line-height: 1.8;
+      }
+      
+      audio {
+        margin-top: 20px;
+      }
+    }
+    
+    /* 極小画面用 */
+    @media (max-width: 320px) {
+      .tab-button {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+      
+      .tab-content {
+        padding: 12px 8px;
+      }
+      
+      pre {
+        font-size: 12px;
+      }
+    }
+    
+    /* ダークテーマ特有の調整 */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #111111;
+      }
+    }
+    
+    /* ホバーエフェクトをタッチデバイスで無効化 */
+    @media (hover: none) {
+      .tab-button:hover {
+        background: none;
+      }
+    }
+    
+    /* フッター */
+    .footer {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+    
+    .artist-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin: 0 auto 20px;
+      display: block;
+      border: 1px solid #333333;
+    }
+
+    .rogo-photo {
+      width: 300px;
+      height: 80px;
+      object-fit: cover;
+      margin: 0 auto 20px;
+      display: block;
+    }
+    
+    .artist-name {
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      color: #ffffff;
+      margin-bottom: 25px;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+    
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      background: #1a1a1a;
+      color: #888;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid #333333;
+      transition: all 0.3s ease;
+      font-size: 18px;
+    }
+    
+    .social-link:hover {
+      color: #ffffff;
+      background: #222222;
+      border-color: #555555;
+    }
+    
+    .social-link:focus {
+      outline: 2px solid #ffffff;
+      outline-offset: 2px;
+    }
+    
+    /* タブレット用 */
+    @media (max-width: 768px) {
+      .footer {
+        margin-top: 40px;
+        padding-top: 30px;
+      }
+      
+      .artist-photo {
+        width: 100px;
+        height: 100px;
+      }
+      
+      .social-links {
+        gap: 15px;
+      }
+      
+      .social-link {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+    }
+    
+    /* フォーカス状態の改善 */
+    .tab-button:focus {
+      outline: 2px solid #ffffff;
+      outline-offset: 2px;
+    }
+    
+    /* 高解像度ディスプレイ対応 */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      h1, h2 {
+        text-rendering: optimizeLegibility;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>2025.08.30 EP</h1>
+  <div class="tabs">
+    <button class="tab-button active" data-tab="tab1">pinknoise</button>
+    <button class="tab-button" data-tab="tab2">amazara</button>
+    <button class="tab-button" data-tab="tab3">monika</button>
+    <button class="tab-button" data-tab="tab4">mortel</button>
+    <button class="tab-button" data-tab="tab5">仮面</button>
+  </div>
+
+  <div id="tab1" class="tab-content tab-pane active">
+    <h2>pinknoise</h2>
+    <pre>
+      ピンクノイズは不意に現れて
+      制御のない脳に深く住み着くだろう
+      
+      もう公共の場ではない
+      誰彼アナーキーで
+      頭は掴まれたように重い
+      
+      揺らいでしまう
+      他にやることはあるのに
+      何故だか急いで処理をしようとして
+      
+      浅い夢は細く白い手でハグしてる
+      今日はなんでもしても良いよ
+      
+      甘い声と音、大切に覚えている
+      この夜は不安定でいて
+      その感覚が愛おしいのさ
+      
+      浅い夢は細く白い手でハグしてる
+      今日は違うことしてもいいよ
+      
+      甘い声と音、大切に覚えている
+      この夜は不安定でいて
+      その感覚が愛おしいのさ
+    </pre>
+    <audio controls src="audios/pinknoise.wav"></audio>
+  </div>
+
+  <div id="tab2" class="tab-content tab-pane">
+    <h2>amazara</h2>
+    <pre>
+      火事屋さんに挨拶
+      安心な価値は無い
+      昨日とは違う容疑者
+      昼黙って
+      昼黙っている
+      
+      負け顔もできないなら罰金だろ
+      時代に合わないのはナンセンス
+      被害者なんていないのに
+      
+      言葉の履き違えで憤っている
+      意味なんかない方が皆ハッピー
+      左脳がより怠けていく
+      
+      もう止められない
+      魔女をしばく総鬱憤
+      超骨密度粗い
+      粗悪品のスポンジ
+      道徳おさらいは
+      どう見たって悪問集
+      張子の総裁また
+      総辞職このハゲ
+      媒体もどき
+      カタカナが多くて
+      不要な太文字
+      どこ行ったって無滑稽
+      恍惚の笑い
+      バランスがない武闘芸
+      どうでしたか無意味
+      等身大母子惑星へ
+      
+      ハウスダスト/ 煩悩 どっちが濃いの
+      良いでしょう無礼な隣人活動
+      ウィーンガシャンと吠える三毛猫
+      無い可視光、藻色、どれの間？
+      有名そうなソと有名なレ
+      冬瞑想、しそう、凍瞑想死しそう
+      ニューガストは猫が調理番長
+      意味ないと嫌だなんて変な人
+    </pre>
+    <audio controls src="audios/amazara.wav"></audio>
+  </div>
+
+  <div id="tab3" class="tab-content tab-pane">
+    <h2>monika</h2>
+    <pre>
+      結局は答えない 結局は答えないよ
+      結局は答えない 結局は答えないよ
+
+      スローになりたがる渡来人と踊り出す
+      大胆なこの調子で狂います
+      擦り付けるような色に劣らない
+      極東から裸足で邪魔します
+      
+      スローになりたがる渡来人と踊り出す
+      大胆なこの調子で狂います
+      擦り付けるような色に劣らない
+      極東から裸足で邪魔します
+      
+      結局は答えない 結局は答えないよ
+      結局は答えない 結局は答えないよ
+      
+      スローになりたがる渡来人と踊り出す
+      大胆なこの調子で狂います
+      擦り付けるような色に劣らない
+      極東から裸足で邪魔します
+
+      侵略途中宇宙人も踊り出す
+      大胆なこの調子で狂わせたい
+      擦り付けるような色に欲情しない
+      高まるご想像に任せます
+    </pre>
+    <audio controls src="audios/monika.wav"></audio>
+  </div>
+
+  <div id="tab4" class="tab-content tab-pane">
+    <h2>mortel</h2>
+    <pre>
+      道端で拾って大事にしていた
+      ガラスの破片を
+      自販機の瓶と知っても
+      気づいたらもう綺麗にしか見えない
+      
+      人が居ない
+      生きがいがないままで
+      自分以外にしか
+      拠り所がない姿で
+      
+      人間的に腐って
+      賞味期限が切れた他人の感性を
+      蒸留しているに過ぎない
+      自分のこと、まだ疑えるだろう
+      
+      DeepSeekじゃん
+      見た目だけ最新ぶってる
+      搭載したOSは一生vistaのままで
+      
+      長い時間を使って傷ついたこと
+      一度許してみよう
+      まだ軽くならないけど
+      流れているインターネットミュージックを
+      今は飲み込まないでいよう
+      遠回りしたっても
+      
+      人が居ない
+      生きがいがないままで
+      自分以外にしか
+      拠り所がない姿で
+      
+      理論や技術では
+      裏付けされてないところで
+      滾っていた火は
+      もう既に消えている
+      
+      長い時間を使って傷ついたこと
+      一度許してみよう
+      まだ軽くならないけど
+      流れているインターネットミュージックを
+      今は飲み込まないでいよう
+      遠回りしたっても
+    </pre>
+    <audio controls src="audios/mortel.wav"></audio>
+  </div>
+
+  <div id="tab5" class="tab-content tab-pane">
+    <h2>仮面</h2>
+    <pre>
+      所詮人の思うところで
+      自分を図ってしまう弱い癖
+      どだい突き抜けることもなくて
+      このままじゃ端くれ
+      アイドルは自由帳の上
+      あとはなぞるだけ
+      
+      そんなのを好む感性なら捨てちゃえと
+      自分に言って
+      見かけだけクールに気取って
+      騙しているように今は感じている
+      
+      少し前の自分ならなんだって
+      否定したって良いと思う悪い癖
+      芯から出た言葉ほど野暮ったくて
+      日曜日が終わった
+      
+      これでも身の丈を超えてしまっているよ
+      自分の姿で
+      上振れた泡のとこだけ上手く掬って
+      皿に載せている
+      捻くれてそれでいて尖ってはいない
+      こんな性格を
+      ひっくり返すフレーズがなくて
+      このままでこの先も生きていくんだ
+    </pre>
+    <audio controls src="audios/仮面.wav"></audio>
+  </div>
+
+  <footer class="footer">
+    <img src="statics/rogo.png" alt="Rogo Photo" class="rogo-photo">
+    <div class="social-links">
+      <a href="https://x.com/Shanghai_holic" class="social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
+      <a href="https://www.instagram.com/shanghaiholic/" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+      </a>
+      <a href="https://www.youtube.com/@shanghaiholic" class="social-link" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabButtons = document.querySelectorAll('.tab-button');
+      const tabPanes = document.querySelectorAll('.tab-pane');
+
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          tabPanes.forEach(pane => pane.classList.remove('active'));
+
+          button.classList.add('active');
+          document.getElementById(button.dataset.tab).classList.add('active');
+        });
+      });
+
+      // キーボードナビゲーション対応
+      tabButtons.forEach((button, index) => {
+        button.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft' && index > 0) {
+            e.preventDefault();
+            tabButtons[index - 1].focus();
+          } else if (e.key === 'ArrowRight' && index < tabButtons.length - 1) {
+            e.preventDefault();
+            tabButtons[index + 1].focus();
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
