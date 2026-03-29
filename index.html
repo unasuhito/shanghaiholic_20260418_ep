@@ -69,12 +69,20 @@
       margin-bottom: 40px;
     }
     
-    /* --- 曲リスト (旧 tabs) --- */
+    /* 全体コンテナ：リストと画像を並べる */
+    .main-content {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      margin-bottom: 40px;
+    }
+
+    /* トラックリストの幅調整 */
     .track-list {
+      flex: 1; /* 残りの幅をすべて使う */
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-bottom: 40px;
     }
     
     .track-item {
@@ -101,6 +109,22 @@
       align-items: center;
       padding: 15px 20px;
       cursor: pointer; /* 曲名クリックで歌詞展開 */
+    }
+
+    /* ジャケット画像のラッパー */
+    .jacket-wrapper {
+      flex: 0 0 300px; /* 幅を300pxに固定 */
+      position: sticky;
+      top: 110px; /* プレイヤーの下に固定 */
+    }
+
+    .jacket-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.8); /* 細い白枠 */
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* 影で立体感を出す */
+      border-radius: 4px;
     }
 
     /* 再生ボタンのスタイル */
@@ -181,6 +205,28 @@
     ::-webkit-scrollbar-track { background: #222222; }
     ::-webkit-scrollbar-thumb { background: #555555; border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: #777777; }
+
+    /* スマホ表示のレスポンシブ設定 */
+    @media (max-width: 768px) {
+      .main-content {
+        flex-direction: column; /* 縦並びに変更 */
+        gap: 30px;
+      }
+
+      .jacket-wrapper {
+        flex: none;
+        width: 100%;
+        max-width: 400px; /* スマホで大きすぎないように */
+        margin: 0 auto;
+        order: 2; /* リスト（order:デフォルト0）より後に配置 */
+        position: static; /* スティッキーを解除 */
+      }
+      
+      .track-list {
+        width: 100%;
+        order: 1;
+      }
+    }
     
     /* --- レスポンシブ対応 --- */
     @media (max-width: 480px) {
@@ -230,59 +276,68 @@
 
   <h1 class="asset-regular">2026.04.18 EP</h1>
 
-  <div class="track-list" id="track-list">
-    
-    <div class="track-item asset-regular" data-audio="audios/fukazume.mp3" data-lyrics="fukazume.txt">
-      <div class="track-header">
-        <button class="play-trigger" aria-label="再生">▶</button>
-        <span class="track-title">fukazume</span>
+  <div class="main-content">
+      
+    <div class="track-list" id="track-list">
+
+      <div class="track-item asset-regular" data-audio="audios/fukazume.mp3" data-lyrics="fukazume.txt">
+        <div class="track-header">
+          <button class="play-trigger" aria-label="再生">▶</button>
+          <span class="track-title">fukazume</span>
+        </div>
+        <div class="lyrics-container">
+          <pre class="lyrics-display"></pre>
+        </div>
       </div>
-      <div class="lyrics-container">
-        <pre class="lyrics-display"></pre>
+
+      <div class="track-item asset-regular" data-audio="audios/jamamon.mp3" data-lyrics="jamamon.txt">
+        <div class="track-header">
+          <button class="play-trigger" aria-label="再生">▶</button>
+          <span class="track-title">jamamon</span>
+        </div>
+        <div class="lyrics-container">
+          <pre class="lyrics-display"></pre>
+        </div>
       </div>
+
+      <div class="track-item asset-regular" data-audio="audios/unasuhito.mp3" data-lyrics="unasuhito.txt">
+        <div class="track-header">
+          <button class="play-trigger" aria-label="再生">▶</button>
+          <span class="track-title">unasuhito</span>
+        </div>
+        <div class="lyrics-container">
+          <pre class="lyrics-display"></pre>
+        </div>
+      </div>
+
+      <div class="track-item asset-regular" data-audio="audios/透明になっていく.mp3" data-lyrics="透明になっていく.txt">
+        <div class="track-header">
+          <button class="play-trigger" aria-label="再生">▶</button>
+          <span class="track-title"><span class="jptxt-scale">透明になっていく</span></span>
+        </div>
+        <div class="lyrics-container">
+          <pre class="lyrics-display"></pre>
+        </div>
+      </div>
+
+      <div class="track-item asset-regular" data-audio="audios/clean-freak.mp3" data-lyrics="clean-freak.txt">
+        <div class="track-header">
+          <button class="play-trigger" aria-label="再生">▶</button>
+          <span class="track-title">clean-freak</span>
+        </div>
+        <div class="lyrics-container">
+          <pre class="lyrics-display"></pre>
+        </div>
+      </div>
+    </div> 
+      
+    <div class="jacket-wrapper">
+      <img src="statics/jacket.png" alt="EP Jacket" class="jacket-img">
     </div>
 
-    <div class="track-item asset-regular" data-audio="audios/jamamon.mp3" data-lyrics="jamamon.txt">
-      <div class="track-header">
-        <button class="play-trigger" aria-label="再生">▶</button>
-        <span class="track-title">jamamon</span>
-      </div>
-      <div class="lyrics-container">
-        <pre class="lyrics-display"></pre>
-      </div>
-    </div>
-
-    <div class="track-item asset-regular" data-audio="audios/unasuhito.mp3" data-lyrics="unasuhito.txt">
-      <div class="track-header">
-        <button class="play-trigger" aria-label="再生">▶</button>
-        <span class="track-title">unasuhito</span>
-      </div>
-      <div class="lyrics-container">
-        <pre class="lyrics-display"></pre>
-      </div>
-    </div>
-
-    <div class="track-item asset-regular" data-audio="audios/透明になっていく.mp3" data-lyrics="透明になっていく.txt">
-      <div class="track-header">
-        <button class="play-trigger" aria-label="再生">▶</button>
-        <span class="track-title"><span class="jptxt-scale">透明になっていく</span></span>
-      </div>
-      <div class="lyrics-container">
-        <pre class="lyrics-display"></pre>
-      </div>
-    </div>
-
-    <div class="track-item asset-regular" data-audio="audios/clean-freak.mp3" data-lyrics="clean-freak.txt">
-      <div class="track-header">
-        <button class="play-trigger" aria-label="再生">▶</button>
-        <span class="track-title">clean-freak</span>
-      </div>
-      <div class="lyrics-container">
-        <pre class="lyrics-display"></pre>
-      </div>
-    </div>
-
-  </div> <footer class="footer">
+  </div> 
+  
+  <footer class="footer">
     <img src="statics/rogo.png" alt="Rogo Photo" class="rogo-photo">
     <div class="social-links">
       <a href="https://x.com/Shanghai_holic" class="social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
