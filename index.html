@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Asset&family=Kosugi+Maru&family=Noto+Sans+JP:wght@100..900&family=Zen+Kaku+Gothic+New&display=swap" rel="stylesheet">
   <title>2025.08.30 EP</title>
   <style>
     * {
@@ -41,48 +44,33 @@
     
     .tabs {
       display: flex;
-      justify-content: center;
+      flex-direction: column; /* 縦並びに変更 */
+      align-items: center;    /* 中央揃え */
       margin-bottom: 30px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      border-bottom: none;    /* 下線を消す */
+      /* スマホ用の横スクロール設定を解除 */
+      overflow-x: visible;
+      -webkit-overflow-scrolling: auto;
     }
     
     .tab-button {
-      padding: 15px 20px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-size: clamp(14px, 2.5vw, 16px);
-      font-weight: 400;
-      color: #888;
-      position: relative;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      white-space: nowrap;
-      letter-spacing: 1px;
-      min-width: fit-content;
+      width: 100%;            /* 横幅を広げる */
+      max-width: 300px;       /* ボタンが広がりすぎないよう制限 */
+      padding: 12px 20px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1); /* ボタンの区切り線 */
+      margin-bottom: 5px;     /* ボタン間の隙間 */
+      border-radius: 4px;     /* 少し角を丸くする */
     }
-    
-    .tab-button:hover {
-      color: #ffffff;
-      background: #222222;
-    }
-    
-    .tab-button.active {
-      color: #ffffff;
-      background: #1a1a1a;
-    }
-    
+
     .tab-button.active::after {
-      content: "";
-      position: absolute;
-      bottom: -1px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60%;
-      height: 2px;
-      background: #ffffff;
-      border-radius: 2px;
+      /* 下線の演出を消す、もしくは左側に線を出すなどの調整 */
+      display: none; 
+    }
+
+    .tab-button.active {
+      border-color: #ffffff; /* アクティブ時に枠線を白くする */
+      background: rgba(255, 180, 0, 0.9);
     }
     
     .tab-content {
@@ -113,7 +101,6 @@
     
     audio {
       width: 100%;
-      margin-top: 25px;
       border-radius: 8px;
       background: #1a1a1a;
       outline: none;
@@ -187,7 +174,7 @@
       
       .tab-button {
         padding: 10px 12px;
-        font-size: 13px;
+        font-size: 20px;
       }
       
       .tab-content {
@@ -330,6 +317,12 @@
       outline: 2px solid #ffffff;
       outline-offset: 2px;
     }
+
+    .asset-regular {
+      font-family: "Asset", serif;
+      font-weight: 400;
+      font-style: normal;
+    }
     
     /* 高解像度ディスプレイ対応 */
     @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
@@ -340,43 +333,43 @@
   </style>
 </head>
 <body>
-  <h1>2026.04.18 EP</h1>
+  <h1 class="asset-regular">2026.04.18 EP</h1>
   <div class="tabs">
-    <button class="tab-button active" data-tab="tab1" data-file="fukazume.txt">fukazume</button>
-    <button class="tab-button" data-tab="tab2" data-file="jamamon.txt">jamamon</button>
-    <button class="tab-button" data-tab="tab3" data-file="unasuhito.txt">unasuhito</button>
-    <button class="tab-button" data-tab="tab4" data-file="透明になっていく.txt">透明になっていく</button>
-    <button class="tab-button" data-tab="tab5" data-file="clean-freak.txt">clean-freak</button>
+    <button class="tab-button asset-regular active" data-tab="tab1" data-file="fukazume.txt">fukazume</button>
+    <button class="tab-button asset-regular" data-tab="tab2" data-file="jamamon.txt">jamamon</button>
+    <button class="tab-button asset-regular" data-tab="tab3" data-file="unasuhito.txt">unasuhito</button>
+    <button class="tab-button asset-regular" data-tab="tab4" data-file="透明になっていく.txt">透明になっていく</button>
+    <button class="tab-button asset-regular" data-tab="tab5" data-file="clean-freak.txt">clean-freak</button>
   </div>
 
-  <div id="tab1" class="tab-content tab-pane active">
+  <div id="tab1" class="tab-content tab-pane asset-regular active">
     <h2>fukazume</h2>
-    <pre class="lyrics-display">歌詞を読み込み中...</pre>
     <audio controls src="audios/fukazume.mp3"></audio>
+    <pre class="lyrics-display">歌詞を読み込み中...</pre>
   </div>
 
-  <div id="tab2" class="tab-content tab-pane">
+  <div id="tab2" class="tab-content tab-pane asset-regular">
     <h2>jamamon</h2>
-    <pre class="lyrics-display"></pre>
     <audio controls src="audios/jamamon.mp3"></audio>
+    <pre class="lyrics-display"></pre>
   </div>
 
-  <div id="tab3" class="tab-content tab-pane">
+  <div id="tab3" class="tab-content tab-pane asset-regular">
     <h2>unasuhito</h2>
-    <pre class="lyrics-display"></pre>
     <audio controls src="audios/unasuhito.mp3"></audio>
+    <pre class="lyrics-display"></pre>
   </div>
 
-  <div id="tab4" class="tab-content tab-pane">
+  <div id="tab4" class="tab-content tab-pane asset-regular">
     <h2>透明になっていく</h2>
-    <pre class="lyrics-display"></pre>
     <audio controls src="audios/透明になっていく.mp3"></audio>
+    <pre class="lyrics-display"></pre>
   </div>
 
-  <div id="tab5" class="tab-content tab-pane">
+  <div id="tab5" class="tab-content tab-pane asset-regular">
     <h2>clean-freak</h2>
-    <pre class="lyrics-display"></pre>
     <audio controls src="audios/clean-freak.mp3"></audio>
+    <pre class="lyrics-display"></pre>
   </div>
 
   <footer class="footer">
