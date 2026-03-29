@@ -164,6 +164,33 @@
       align-content: top left;
     }
 
+    /* ダウンロードボタンのスタイル */
+    .download-trigger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-left: 12px;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+      opacity: 0.6;
+    }
+
+    .download-trigger:hover {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+
+    .download-trigger img {
+      height: 20px;
+      width: auto;
+    }
+
     /* 現在再生中の曲のボタン色 */
     .track-item.playing .play-trigger {
       color: rgba(255, 180, 0, 0.9);
@@ -304,6 +331,7 @@
         <div class="track-header">
           <button class="play-trigger" aria-label="再生">▶</button>
           <span class="track-title">fukazume</span>
+          <button class="download-trigger" aria-label="ダウンロード"><img src="statics/download.png" alt="download"></button>
         </div>
         <div class="lyrics-container">
           <pre class="lyrics-display"></pre>
@@ -314,6 +342,7 @@
         <div class="track-header">
           <button class="play-trigger" aria-label="再生">▶</button>
           <span class="track-title">jamamon</span>
+          <button class="download-trigger" aria-label="ダウンロード"><img src="statics/download.png" alt="download"></button>
         </div>
         <div class="lyrics-container">
           <pre class="lyrics-display"></pre>
@@ -324,6 +353,7 @@
         <div class="track-header">
           <button class="play-trigger" aria-label="再生">▶</button>
           <span class="track-title">unasuhito</span>
+          <button class="download-trigger" aria-label="ダウンロード"><img src="statics/download.png" alt="download"></button>
         </div>
         <div class="lyrics-container">
           <pre class="lyrics-display"></pre>
@@ -334,6 +364,7 @@
         <div class="track-header">
           <button class="play-trigger" aria-label="再生">▶</button>
           <span class="track-title"><span class="jptxt-scale">透明になっていく</span></span>
+          <button class="download-trigger" aria-label="ダウンロード"><img src="statics/download.png" alt="download"></button>
         </div>
         <div class="lyrics-container">
           <pre class="lyrics-display"></pre>
@@ -344,6 +375,7 @@
         <div class="track-header">
           <button class="play-trigger" aria-label="再生">▶</button>
           <span class="track-title">clean-freak</span>
+          <button class="download-trigger" aria-label="ダウンロード"><img src="statics/download.png" alt="download"></button>
         </div>
         <div class="lyrics-container">
           <pre class="lyrics-display"></pre>
@@ -438,12 +470,24 @@
       // --- イベント設定 ---
       trackItems.forEach((item, index) => {
         const playBtn = item.querySelector('.play-trigger');
+        const downloadBtn = item.querySelector('.download-trigger');
         const header = item.querySelector('.track-header');
 
         // 再生ボタンクリック
         playBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           togglePlay(index);
+        });
+
+        // ダウンロードボタンクリック
+        downloadBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const audioSrc = item.dataset.audio;
+          const trackTitle = item.querySelector('.track-title').textContent.trim();
+          const link = document.createElement('a');
+          link.href = audioSrc;
+          link.download = trackTitle + '.mp3';
+          link.click();
         });
 
         // 曲名ヘッダークリック（歌詞の開閉のみ）
