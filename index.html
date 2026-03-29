@@ -146,6 +146,13 @@
       transform: scale(1.1);
     }
 
+    /* 再生ボタン内の画像サイズ */
+    .play-trigger img {
+      height: 14px;
+      width: auto;
+      align-content: top left;
+    }
+
     /* 現在再生中の曲のボタン色 */
     .track-item.playing .play-trigger {
       color: rgba(255, 180, 0, 0.9);
@@ -389,13 +396,13 @@
           // 全体の「再生中」表示をリセット
           trackItems.forEach(item => {
             item.classList.remove('playing');
-            item.querySelector('.play-trigger').textContent = '▶';
+            item.querySelector('.play-trigger').innerHTML = '▶';
           });
         }
 
         player.play();
         trackItem.classList.add('playing');
-        trackItem.querySelector('.play-trigger').textContent = '⏸';
+        trackItem.querySelector('.play-trigger').innerHTML = '<img src="statics/pause.png" alt="pause">';
       }
 
       // --- 再生/一時停止を切り替える関数 ---
@@ -438,13 +445,13 @@
       // --- プレイヤーの状態をリストのボタンに同期 ---
       player.addEventListener('play', () => {
         if (currentPlayingIndex !== -1) {
-          trackItems[currentPlayingIndex].querySelector('.play-trigger').textContent = '⏸';
+          trackItems[currentPlayingIndex].querySelector('.play-trigger').innerHTML = '<img src="statics/pause.png" alt="pause">';
         }
       });
 
       player.addEventListener('pause', () => {
         if (currentPlayingIndex !== -1) {
-          trackItems[currentPlayingIndex].querySelector('.play-trigger').textContent = '▶';
+          trackItems[currentPlayingIndex].querySelector('.play-trigger').innerHTML = '▶';
         }
       });
 
